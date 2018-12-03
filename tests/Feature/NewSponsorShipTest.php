@@ -28,7 +28,7 @@ class NewSponsorShipTest extends TestCase
         $response = $this->get('/full-stack-radio/sponsorships/new');
 
         $response->assertSuccessful();
-        $response->assertTrue($response->data('sponsorable')->is($sponsorable));
+        $this->assertTrue($response->data('sponsorable')->is($sponsorable));
         $sponsorableSlots->assertEquals($response->data('sponsorableSlots'));
     }
 

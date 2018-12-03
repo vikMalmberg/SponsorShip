@@ -15,7 +15,6 @@ class SponsorableSponsorshipsController extends Controller
 
         $sponsorableSlots = $sponsorable->slots()
                                         ->purchasable()
-                                        ->where('publish_date', '>' ,now())
                                         ->orderBy('publish_date')
                                         ->get();
 

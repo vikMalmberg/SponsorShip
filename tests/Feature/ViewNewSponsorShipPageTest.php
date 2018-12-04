@@ -4,12 +4,11 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use App\Sponsorable;
+use App\Sponsorship;
 use App\SponsorableSlot;
-use App\Purchase;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Carbon;
 
 class ViewNewSponsorShipPageTest extends TestCase
 {
@@ -75,11 +74,11 @@ class ViewNewSponsorShipPageTest extends TestCase
     public function only_purchasable_sponsorable_slots_are_listed()
     {
         $sponsorable = factory(Sponsorable::class)->create(['slug' => 'full-stack-radio']);
-        $purchase = factory(Purchase::class)->create();
+        $sponsorship = factory(Sponsorship::class)->create();
 
         $slotA = factory(SponsorableSlot::class)->create(['sponsorable_id' => $sponsorable, 'publish_date' => now()->addMonths(1)]);
-        $slotB = factory(SponsorableSlot::class)->create(['sponsorable_id' => $sponsorable,  'publish_date' => now()->addMonths(2), 'purchase_id' => $purchase]);
-        $slotC = factory(SponsorableSlot::class)->create(['sponsorable_id' => $sponsorable,  'publish_date' => now()->addMonths(3), 'purchase_id' => $purchase]);
+        $slotB = factory(SponsorableSlot::class)->create(['sponsorable_id' => $sponsorable,  'publish_date' => now()->addMonths(2), 'sponsorship_id' => $sponsorship]);
+        $slotC = factory(SponsorableSlot::class)->create(['sponsorable_id' => $sponsorable,  'publish_date' => now()->addMonths(3), 'sponsorship_id' => $sponsorship]);
         $slotD =  factory(SponsorableSlot::class)->create(['sponsorable_id' => $sponsorable, 'publish_date' => now()->addMonths(4)]);
 
         $response = $this->get('/full-stack-radio/sponsorships/new');

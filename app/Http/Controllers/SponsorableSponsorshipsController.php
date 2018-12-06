@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Sponsorable;
 use App\SponsorableSlot;
 use App\Sponsorship;
+use App\Exceptions\PaymentFailedException;
 
 class SponsorableSponsorshipsController extends Controller
 {
@@ -34,22 +35,26 @@ class SponsorableSponsorshipsController extends Controller
 
     public function store($slug)
     {
+        try{
 
-        $sponsorable = Sponsorable::findOrFailBySlug($slug);
+            $sponsorable = Sponsorable::findOrFailBySlug($slug);
 
 
-        $slots = SponsorableSlot::whereIn('id', request('sponsorable_slots'))->get();
+            $slots = SponsorableSlot::whereIn('id', request('sponsorable_slots'))->get();
 
-        $sponsorship = Sponsorship::create([
-            'email' => request('email'),
-            'company_name' => request('company_name'),
-            'amount' => $slots->sum('price'),
-        ]);
+            $this->paymentGateway->charge(request('email'), $slots->sum('price'), request('payment_token'), "{$sponsorable->name} sponsorship");
 
-        $this->paymentGateway->charge(request('email'), $slots->sum('price'), 'tok', "{$sponsorable->name} sponsorship");
+            $sponsorship = Sponsorship::create([
+                'email' => request('email'),
+                'company_name' => request('company_name'),
+                'amount' => $slots->sum('price'),
+            ]);
 
-        $slots->each->update(['sponsorship_id' => $sponsorship->id]);
+            $slots->each->update(['sponsorship_id' => $sponsorship->id]);
 
-        return response()->json([],201);
+            return response()->json([],201);
+        } catch (PaymentFailedException $e) {
+            return response()->json([], 422);
+        }
     }
 }

@@ -37,12 +37,14 @@ class SponsorableSponsorshipsController extends Controller
 
         $sponsorable = Sponsorable::findOrFailBySlug($slug);
 
+
+        $slots = SponsorableSlot::whereIn('id', request('sponsorable_slots'))->get();
+
         $sponsorship = Sponsorship::create([
             'email' => request('email'),
             'company_name' => request('company_name'),
+            'amount' => $slots->sum('price'),
         ]);
-
-        $slots = SponsorableSlot::whereIn('id', request('sponsorable_slots'))->get();
 
         $this->paymentGateway->charge(request('email'), $slots->sum('price'), 'tok', "{$sponsorable->name} sponsorship");
 

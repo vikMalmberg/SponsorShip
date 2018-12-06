@@ -29,12 +29,18 @@ $factory->define(App\Sponsorable::class, function (Faker $faker) {
 
     ];
 });
+
 $factory->define(App\SponsorableSlot::class, function (Faker $faker) {
     return [
         'publish_date' => now()->addMonths(1),
+        'price' => 5000,
     ];
 });
+
 $factory->define(App\Sponsorship::class, function (Faker $faker) {
     return [
+        'email' => 'john@example.com',
+        'company_name' => 'ExampleSoft',
+        'amount' =>  50000,
     ];
 });

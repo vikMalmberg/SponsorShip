@@ -9,6 +9,8 @@ use App\SponsorableSlot;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\PaymentGateway;
+use tests\FakePaymentGateway;
 
 class ViewNewSponsorShipPageTest extends TestCase
 {
@@ -17,6 +19,8 @@ class ViewNewSponsorShipPageTest extends TestCase
     /** @test */
     public function viewing_the_new_sponsorship_page()
     {
+        $paymentGateway = $this->app->instance(PaymentGateway::class, new FakePaymentGateway);
+
         $sponsorable = factory(Sponsorable::class)->create(['slug' => 'full-stack-radio']);
 
         $sponsorableSlots = new EloquentCollection([
@@ -35,6 +39,8 @@ class ViewNewSponsorShipPageTest extends TestCase
      /** @test */
     public function sponsorable_slots_are_listed_in_chronological_order()
     {
+        $paymentGateway = $this->app->instance(PaymentGateway::class, new FakePaymentGateway);
+
         $sponsorable = factory(Sponsorable::class)->create(['slug' => 'full-stack-radio']);
 
         $slotA = factory(SponsorableSlot::class)->create(['publish_date' => now()->addDays(10), 'sponsorable_id' => $sponsorable ]);
@@ -54,6 +60,8 @@ class ViewNewSponsorShipPageTest extends TestCase
      /** @test */
     public function only_upcoming_sponsorable_slots_are_listed()
     {
+        $paymentGateway = $this->app->instance(PaymentGateway::class, new FakePaymentGateway);
+
         $sponsorable = factory(Sponsorable::class)->create(['slug' => 'full-stack-radio']);
 
         $slotA = factory(SponsorableSlot::class)->create(['publish_date' => now()->subDays(10), 'sponsorable_id' => $sponsorable ]);
@@ -73,6 +81,8 @@ class ViewNewSponsorShipPageTest extends TestCase
      /** @test */
     public function only_purchasable_sponsorable_slots_are_listed()
     {
+        $paymentGateway = $this->app->instance(PaymentGateway::class, new FakePaymentGateway);
+
         $sponsorable = factory(Sponsorable::class)->create(['slug' => 'full-stack-radio']);
         $sponsorship = factory(Sponsorship::class)->create();
 

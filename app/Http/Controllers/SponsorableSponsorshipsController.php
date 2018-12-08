@@ -34,22 +34,25 @@ class SponsorableSponsorshipsController extends Controller
     }
 
     public function store($slug)
-    {
+   {
+
         try{
+            $sponsorable = Sponsorable::findOrFailBySlug($slug);
 
             request()->validate([
                 'company_name' => ['required'],
                 'email' => ['required','email'],
                 'payment_token' => ['required'],
-            ]);
+                'sponsorable_slots' => ['bail','required','array', function($attribute, $value, $fail) use ($sponsorable) {
+                    if(collect($value)->unique()->count() !== count($value)){
+                        $fail("you cannot sponsor the same slot more than once");
+                    }
+            }],
+        ]);
 
-            $sponsorable = Sponsorable::findOrFailBySlug($slug);
+            $slots = $sponsorable->slots()->findOrFail(request('sponsorable_slots'));
 
-            $slots = $sponsorable->slots()->whereIn('id', request('sponsorable_slots'))->get();
-
-            abort_unless($slots->count() === count(request('sponsorable_slots')),400);
-
-            $this->paymentGateway->charge(request('email'), $slots->sum('price'), request('payment_token'), "{$sponsorable->name} sponsorship");
+             $this->paymentGateway->charge(request('email'), $slots->sum('price'), request('payment_token'), "{$sponsorable->name} sponsorship");
 
             $sponsorship = Sponsorship::create([
                 'email' => request('email'),

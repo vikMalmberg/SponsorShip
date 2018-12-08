@@ -37,6 +37,12 @@ class SponsorableSponsorshipsController extends Controller
     {
         try{
 
+            request()->validate([
+                'company_name' => ['required'],
+                'email' => ['required','email'],
+                'payment_token' => ['required'],
+            ]);
+
             $sponsorable = Sponsorable::findOrFailBySlug($slug);
 
 

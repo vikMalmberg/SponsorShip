@@ -188,4 +188,36 @@ class PurchaseSponsorshipTest extends TestCase
         $this->assertNull($slot->fresh()->sponsorship_id);
         $this->assertCount(0, $paymentGateway->charges());
     }
+
+    /** @test */
+    public function cannot_sponsor_another_sponsorables_slots()
+    {
+        $paymentGateway = $this->app->instance(PaymentGateway::class, new FakePaymentGateway)        ;
+
+        $sponsorable = factory(Sponsorable::class)->create(['slug' => 'full-stack-radio']);
+        $otherSponsorable = factory(Sponsorable::class)->create(['slug' => 'laravel-news']);
+
+        $slotA = factory(SponsorableSlot::class)->create(['price' => 50000, 'sponsorable_id' => $sponsorable, 'publish_date' => now()->addMonths(1) ]);
+        $slotB = factory(SponsorableSlot::class)->create(['price' => 30000, 'sponsorable_id' => $sponsorable, 'publish_date' => now()->addMonths(2) ]);
+        $otherSlot = factory(SponsorableSlot::class)->create(['price' => 25000, 'sponsorable_id' => $otherSponsorable, 'publish_date' => now()->addMonths(3) ]);
+
+        $response = $this->withExceptionHandling()->postJson('/full-stack-radio/sponsorships', [
+            'email' => 'john@example.com',
+            'company_name' => 'ExampleSoft',
+            'payment_token' => $paymentGateway->validTestToken(),
+            'sponsorable_slots' => [
+                $slotA->getKey(),
+                $slotB->getKey(),
+                $otherSlot->getKey(),
+            ]
+        ]);
+
+        $response->assertStatus(400);
+
+        $this->assertEquals(0, Sponsorship::count());
+        $this->assertNull($slotA->fresh()->sponsorship_id);
+        $this->assertNull($slotB->fresh()->sponsorship_id);
+        $this->assertNull($otherSlot->fresh()->sponsorship_id);
+        $this->assertCount(0, $paymentGateway->charges());
+    }
 }

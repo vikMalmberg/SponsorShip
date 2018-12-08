@@ -50,7 +50,7 @@ class SponsorableSponsorshipsController extends Controller
             }],
         ]);
 
-            $slots = $sponsorable->slots()->findOrFail(request('sponsorable_slots'));
+            $slots = $sponsorable->slots()->sponsorable()->findOrFail(request('sponsorable_slots'));
 
              $this->paymentGateway->charge(request('email'), $slots->sum('price'), request('payment_token'), "{$sponsorable->name} sponsorship");
 

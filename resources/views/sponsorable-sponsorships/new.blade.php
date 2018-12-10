@@ -5,13 +5,14 @@
         <div class="max-w-md mx-auto px-6 py-16">
             <h1 class="text-2xl text-center font-semibold mb-8 ">Which episodes would you like to sponsor</h1>
             <ul class="list-reset">
-                <li>
-                    <div class="bg-white rounded-lg shadow p-4 flex group">
+                @foreach (range(1, 4) as $i)
+                <li class="mb-4">
+                    <div class="bg-white rounded-lg shadow p-4 flex group border-2 border-transparent hover:border-indigo-light select-none cursor-pointer">
                         <div class="w-3/4 flex items-center justify-between">
                             <div class="flex items-center">
                                 <img class ="block h-16 w-16 mr-4 rounded" src="https://media.simplecast.com/podcast/image/279/small_1413649662-artwork.jpg">
                                 <div>
-                                    <div class="text-lg font-bold">Full Stack Radio: Episode 89</div>
+                                    <div class="text-lg font-bold">Full Stack Radio: Episode {{ 89 + $i }}</div>
                                     <div class="text-sm text-grey-dark">June 6, 2018</div>
                                 </div>
                             </div>
@@ -27,6 +28,7 @@
                         </div>
                     </div>
                 </li>
+                @endforeach
             </ul>
         </div>
         <div class="bg-white border-t-2 border-grey fixed pin-b pin-x">

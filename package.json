@@ -19,5 +19,9 @@
         "postcss-nesting": "^5.0.0",
         "tailwindcss": "^0.7.2",
         "vue": "^2.5.17"
+    },
+    "dependencies": {
+        "accounting-js": "^1.1.1",
+        "date-fns": "^1.30.1"
     }
 }

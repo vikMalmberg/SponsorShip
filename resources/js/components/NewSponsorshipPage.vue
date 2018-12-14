@@ -23,48 +23,24 @@
                     </div>
                 </div>
                 <div class="w-1/4 flex justify-end items-center">
-                    <button class="rounded px-5 py-2 text-lg leading-normal font-bold text-white rounded bg-indigo hover:bg-indigo-light" type="button">Pay Now</button>
+                    <pay-button :amount="total">Pay Now</pay-button>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<div v-show="false" class="fixed pin bg-black-20 flex justify-center items-center p-6">
-    <div class="max-w-sm w-full  bg-white p-8 rounded-lg shadow-lg">
-        <h2 class="font-semibold text-xl text-center mb-4">Complete your purchase</h2>
-        <form action="#" method ="POST">
-            <label class="block mb-4">
-                <span class="block text-sm font-bold mb-2">Company</span>
-                <input class="leading-normal text-black w-full block bg-grey-light rounded px-4 py-2" placeholder="DigiTechnosoft Inc.">
-            </label>
-            <label class="block mb-4">
-                <span class="block text-sm font-bold mb-2">Email</span>
-                <input class="leading-normal text-black w-full block bg-grey-light rounded px-4 py-2" placeholder="ricardo@milos.br">
-            </label>
-            <label class="block mb-6">
-                <span class="block text-sm font-bold mb-2">Credit Card</span>
-                <input class="leading-normal text-black w-full block bg-grey-light rounded px-4 py-2" placeholder="ricardo@milos.br">
-            </label>
-            <div>
-                <button class="block w-full  px-5 py-2 text-lg leading-normal font-bold text-white rounded bg-indigo hover:bg-indigo-light mb-4" type="submit">
-                    Pay $1500 now
-                </button>
-                <p class="text-grey-dark leading-normal text-center">We'll Reach out for your sponsorship information after you've confirmed your purchase.</p>
-            </div>
-        </form>
     </div>
 </div>
 </div>
 </template>
 
 <script>
-    import SponsorableSlot from './SponsorableSlot'
+    import SponsorableSlot from './SponsorableSlot.vue'
+    import PayButton from './PayButton.vue'
     import _ from 'lodash'
     import formatNumber from 'accounting-js/lib/formatNumber'
 
     export default {
         components:{
+            PayButton,
             SponsorableSlot,
 
         },

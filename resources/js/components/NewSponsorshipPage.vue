@@ -23,7 +23,7 @@
                     </div>
                 </div>
                 <div class="w-1/4 flex justify-end items-center">
-                    <pay-button :amount="total">Pay Now</pay-button>
+                    <pay-button :amount="total" :selectedSlots ="selectedSlots" >Pay Now</pay-button>
                 </div>
             </div>
         </div>
@@ -51,28 +51,28 @@
                     {
                         id: 1,
                         title: 'Full Stack Radio Episode 90',
-                        publish_date : '2018-06-06',
+                        publish_date : '2019-06-06',
                         price: 50000,
                         image_url : 'https://media.simplecast.com/podcast/image/279/small_1413649662-artwork.jpg'
                     },
                     {
                         id: 2,
                         title: 'Full Stack Radio Episode 91',
-                        publish_date : '2018-06-20',
+                        publish_date : '2019-06-20',
                         price: 45000,
                         image_url : 'https://media.simplecast.com/podcast/image/279/small_1413649662-artwork.jpg'
                     },
                     {
                         id: 3,
                         title: 'Full Stack Radio Episode 92',
-                        publish_date : '2018-07-04',
+                        publish_date : '2019-07-04',
                         price: 55000,
                         image_url : 'https://media.simplecast.com/podcast/image/279/small_1413649662-artwork.jpg'
                     },
                     {
                         id: 4,
                         title: 'Full Stack Radio Episode 93',
-                        publish_date : '2018-07-18',
+                        publish_date : '2019-07-18',
                         price: 60000,
                         image_url : 'https://media.simplecast.com/podcast/image/279/small_1413649662-artwork.jpg'
                     },

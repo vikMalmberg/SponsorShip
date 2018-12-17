@@ -70,7 +70,7 @@
 "use strict";
 
 
-var bind = __webpack_require__(7);
+var bind = __webpack_require__(8);
 var isBuffer = __webpack_require__(24);
 
 /*global toString:true*/
@@ -378,7 +378,7 @@ module.exports = {
 /***/ (function(module, exports, __webpack_require__) {
 
 var getTimezoneOffsetInMilliseconds = __webpack_require__(48)
-var isDate = __webpack_require__(14)
+var isDate = __webpack_require__(15)
 
 var MILLISECONDS_IN_HOUR = 3600000
 var MILLISECONDS_IN_MINUTE = 60000
@@ -715,33 +715,6 @@ module.exports = parse
 /* 2 */
 /***/ (function(module, exports) {
 
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
 /* globals __VUE_SSR_CONTEXT__ */
 
 // IMPORTANT: Do NOT use ES2015 features in this file.
@@ -848,6 +821,33 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
+/* 3 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -871,10 +871,10 @@ function getDefaultAdapter() {
   var adapter;
   if (typeof XMLHttpRequest !== 'undefined') {
     // For browsers use XHR adapter
-    adapter = __webpack_require__(9);
+    adapter = __webpack_require__(10);
   } else if (typeof process !== 'undefined') {
     // For node use HTTP adapter
-    adapter = __webpack_require__(9);
+    adapter = __webpack_require__(10);
   }
   return adapter;
 }
@@ -949,7 +949,7 @@ utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
 
 module.exports = defaults;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ }),
 /* 5 */
@@ -984,6 +984,68 @@ module.exports = startOfISOWeek
 
 /***/ }),
 /* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_object_assign__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_object_assign___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_object_assign__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__internal_stripInsignificantZeros__ = __webpack_require__(63);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__settings__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__toFixed__ = __webpack_require__(64);
+
+
+
+
+
+
+/**
+ * Format a number, with comma-separated thousands and custom precision/decimal places
+ * Alias: `accounting.format()`
+ *
+ * Localise by overriding the precision and thousand / decimal separators
+ *
+ * ```js
+ * accounting.formatNumber(5318008);              // 5,318,008
+ * accounting.formatNumber(9876543.21, { precision: 3, thousand: " " }); // 9 876 543.210
+ * ```
+ *
+ * @method formatNumber
+ * @for accounting
+ * @param {Number}        number The number to be formatted.
+ * @param {Object}        [opts={}] Object containing all the options of the method.
+ * @return {String} The given number properly formatted.
+  */
+function formatNumber(number, opts = {}) {
+  // Resursively format arrays:
+  if (Array.isArray(number)) {
+    return number.map((val) => formatNumber(val, opts));
+  }
+
+  // Build options object from second param (if object) or all params, extending defaults:
+  opts = __WEBPACK_IMPORTED_MODULE_0_object_assign___default()({},
+    __WEBPACK_IMPORTED_MODULE_2__settings__["a" /* default */],
+    opts
+  );
+
+  // Do some calc:
+  const negative = number < 0 ? '-' : '';
+  const base = parseInt(Object(__WEBPACK_IMPORTED_MODULE_3__toFixed__["a" /* default */])(Math.abs(number), opts.precision), 10) + '';
+  const mod = base.length > 3 ? base.length % 3 : 0;
+
+  // Format the number:
+  const formatted = negative +
+    (mod ? base.substr(0, mod) + opts.thousand : '') +
+      base.substr(mod).replace(/(\d{3})(?=\d)/g, '$1' + opts.thousand) +
+        (opts.precision > 0 ? opts.decimal + Object(__WEBPACK_IMPORTED_MODULE_3__toFixed__["a" /* default */])(Math.abs(number), opts.precision).split('.')[1] : '');
+
+  return opts.stripZeros ? Object(__WEBPACK_IMPORTED_MODULE_1__internal_stripInsignificantZeros__["a" /* default */])(formatted, opts.decimal) : formatted;
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (formatNumber);
+
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -18095,10 +18157,10 @@ module.exports = startOfISOWeek
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(21)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(21)(module)))
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18116,7 +18178,7 @@ module.exports = function bind(fn, thisArg) {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -18306,7 +18368,7 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18317,7 +18379,7 @@ var settle = __webpack_require__(27);
 var buildURL = __webpack_require__(29);
 var parseHeaders = __webpack_require__(30);
 var isURLSameOrigin = __webpack_require__(31);
-var createError = __webpack_require__(10);
+var createError = __webpack_require__(11);
 var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(32);
 
 module.exports = function xhrAdapter(config) {
@@ -18493,7 +18555,7 @@ module.exports = function xhrAdapter(config) {
 
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18518,7 +18580,7 @@ module.exports = function createError(message, config, code, request, response) 
 
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18530,7 +18592,7 @@ module.exports = function isCancel(value) {
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -18556,7 +18618,7 @@ module.exports = Cancel;
 
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29519,10 +29581,10 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(41).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(41).setImmediate))
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 /**
@@ -29548,7 +29610,7 @@ module.exports = isDate
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var parse = __webpack_require__(1)
@@ -29599,68 +29661,6 @@ module.exports = getISOYear
 
 
 /***/ }),
-/* 16 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_object_assign__ = __webpack_require__(62);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_object_assign___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_object_assign__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__internal_stripInsignificantZeros__ = __webpack_require__(63);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__settings__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__toFixed__ = __webpack_require__(64);
-
-
-
-
-
-
-/**
- * Format a number, with comma-separated thousands and custom precision/decimal places
- * Alias: `accounting.format()`
- *
- * Localise by overriding the precision and thousand / decimal separators
- *
- * ```js
- * accounting.formatNumber(5318008);              // 5,318,008
- * accounting.formatNumber(9876543.21, { precision: 3, thousand: " " }); // 9 876 543.210
- * ```
- *
- * @method formatNumber
- * @for accounting
- * @param {Number}        number The number to be formatted.
- * @param {Object}        [opts={}] Object containing all the options of the method.
- * @return {String} The given number properly formatted.
-  */
-function formatNumber(number, opts = {}) {
-  // Resursively format arrays:
-  if (Array.isArray(number)) {
-    return number.map((val) => formatNumber(val, opts));
-  }
-
-  // Build options object from second param (if object) or all params, extending defaults:
-  opts = __WEBPACK_IMPORTED_MODULE_0_object_assign___default()({},
-    __WEBPACK_IMPORTED_MODULE_2__settings__["a" /* default */],
-    opts
-  );
-
-  // Do some calc:
-  const negative = number < 0 ? '-' : '';
-  const base = parseInt(Object(__WEBPACK_IMPORTED_MODULE_3__toFixed__["a" /* default */])(Math.abs(number), opts.precision), 10) + '';
-  const mod = base.length > 3 ? base.length % 3 : 0;
-
-  // Format the number:
-  const formatted = negative +
-    (mod ? base.substr(0, mod) + opts.thousand : '') +
-      base.substr(mod).replace(/(\d{3})(?=\d)/g, '$1' + opts.thousand) +
-        (opts.precision > 0 ? opts.decimal + Object(__WEBPACK_IMPORTED_MODULE_3__toFixed__["a" /* default */])(Math.abs(number), opts.precision).split('.')[1] : '');
-
-  return opts.stripZeros ? Object(__WEBPACK_IMPORTED_MODULE_1__internal_stripInsignificantZeros__["a" /* default */])(formatted, opts.decimal) : formatted;
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (formatNumber);
-
-
-/***/ }),
 /* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -29689,7 +29689,7 @@ const settings = {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(19);
-module.exports = __webpack_require__(74);
+module.exports = __webpack_require__(77);
 
 
 /***/ }),
@@ -29705,7 +29705,7 @@ module.exports = __webpack_require__(74);
 
 __webpack_require__(20);
 
-window.Vue = __webpack_require__(13);
+window.Vue = __webpack_require__(14);
 Vue.use(__webpack_require__(43));
 
 /**
@@ -29725,7 +29725,7 @@ var app = new Vue({
 /***/ (function(module, exports, __webpack_require__) {
 
 
-window._ = __webpack_require__(6);
+window._ = __webpack_require__(7);
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -29810,7 +29810,7 @@ module.exports = __webpack_require__(23);
 
 
 var utils = __webpack_require__(0);
-var bind = __webpack_require__(7);
+var bind = __webpack_require__(8);
 var Axios = __webpack_require__(25);
 var defaults = __webpack_require__(4);
 
@@ -29845,9 +29845,9 @@ axios.create = function create(instanceConfig) {
 };
 
 // Expose Cancel & CancelToken
-axios.Cancel = __webpack_require__(12);
+axios.Cancel = __webpack_require__(13);
 axios.CancelToken = __webpack_require__(39);
-axios.isCancel = __webpack_require__(11);
+axios.isCancel = __webpack_require__(12);
 
 // Expose all/spread
 axios.all = function all(promises) {
@@ -30000,7 +30000,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 "use strict";
 
 
-var createError = __webpack_require__(10);
+var createError = __webpack_require__(11);
 
 /**
  * Resolve or reject a Promise based on response status.
@@ -30433,7 +30433,7 @@ module.exports = InterceptorManager;
 
 var utils = __webpack_require__(0);
 var transformData = __webpack_require__(36);
-var isCancel = __webpack_require__(11);
+var isCancel = __webpack_require__(12);
 var defaults = __webpack_require__(4);
 var isAbsoluteURL = __webpack_require__(37);
 var combineURLs = __webpack_require__(38);
@@ -30593,7 +30593,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 "use strict";
 
 
-var Cancel = __webpack_require__(12);
+var Cancel = __webpack_require__(13);
 
 /**
  * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -30752,7 +30752,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ }),
 /* 42 */
@@ -30945,7 +30945,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(8)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(9)))
 
 /***/ }),
 /* 43 */
@@ -30959,7 +30959,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
   */
   
 (function (global, factory) {
-	 true ? module.exports = factory(__webpack_require__(13)) :
+	 true ? module.exports = factory(__webpack_require__(14)) :
 	typeof define === 'function' && define.amd ? define(['vue'], factory) :
 	(global.PortalVue = factory(global.Vue));
 }(this, (function (Vue) { 'use strict';
@@ -31580,11 +31580,11 @@ return index;
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(3)
+var normalizeComponent = __webpack_require__(2)
 /* script */
 var __vue_script__ = __webpack_require__(45)
 /* template */
-var __vue_template__ = __webpack_require__(73)
+var __vue_template__ = __webpack_require__(76)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -31632,9 +31632,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__SponsorableSlot_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__SponsorableSlot_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__PayButton_vue__ = __webpack_require__(67);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__PayButton_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__PayButton_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_accounting_js_lib_formatNumber__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_accounting_js_lib_formatNumber__ = __webpack_require__(6);
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 //
@@ -31689,25 +31689,25 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             sponsorableSlots: [{
                 id: 1,
                 title: 'Full Stack Radio Episode 90',
-                publish_date: '2018-06-06',
+                publish_date: '2019-06-06',
                 price: 50000,
                 image_url: 'https://media.simplecast.com/podcast/image/279/small_1413649662-artwork.jpg'
             }, {
                 id: 2,
                 title: 'Full Stack Radio Episode 91',
-                publish_date: '2018-06-20',
+                publish_date: '2019-06-20',
                 price: 45000,
                 image_url: 'https://media.simplecast.com/podcast/image/279/small_1413649662-artwork.jpg'
             }, {
                 id: 3,
                 title: 'Full Stack Radio Episode 92',
-                publish_date: '2018-07-04',
+                publish_date: '2019-07-04',
                 price: 55000,
                 image_url: 'https://media.simplecast.com/podcast/image/279/small_1413649662-artwork.jpg'
             }, {
                 id: 4,
                 title: 'Full Stack Radio Episode 93',
-                publish_date: '2018-07-18',
+                publish_date: '2019-07-18',
                 price: 60000,
                 image_url: 'https://media.simplecast.com/podcast/image/279/small_1413649662-artwork.jpg'
             }]
@@ -31744,7 +31744,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(3)
+var normalizeComponent = __webpack_require__(2)
 /* script */
 var __vue_script__ = __webpack_require__(47)
 /* template */
@@ -31796,7 +31796,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_date_fns_parse___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_date_fns_parse__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_date_fns_format__ = __webpack_require__(49);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_date_fns_format___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_date_fns_format__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_accounting_js_lib_formatNumber__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_accounting_js_lib_formatNumber__ = __webpack_require__(6);
 //
 //
 //
@@ -31873,7 +31873,7 @@ module.exports = function getTimezoneOffsetInMilliseconds (dirtyDate) {
 
 var getDayOfYear = __webpack_require__(50)
 var getISOWeek = __webpack_require__(54)
-var getISOYear = __webpack_require__(15)
+var getISOYear = __webpack_require__(16)
 var parse = __webpack_require__(1)
 var isValid = __webpack_require__(57)
 var enLocale = __webpack_require__(58)
@@ -32433,7 +32433,7 @@ module.exports = startOfWeek
 /* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var getISOYear = __webpack_require__(15)
+var getISOYear = __webpack_require__(16)
 var startOfISOWeek = __webpack_require__(5)
 
 /**
@@ -32471,7 +32471,7 @@ module.exports = startOfISOYear
 /* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isDate = __webpack_require__(14)
+var isDate = __webpack_require__(15)
 
 /**
  * @category Common Helpers
@@ -33020,11 +33020,11 @@ if (false) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(3)
+var normalizeComponent = __webpack_require__(2)
 /* script */
 var __vue_script__ = __webpack_require__(68)
 /* template */
-var __vue_template__ = __webpack_require__(72)
+var __vue_template__ = __webpack_require__(75)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -33084,7 +33084,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     components: {
         CompletePurchaseModal: __WEBPACK_IMPORTED_MODULE_0__CompletePurchaseModal_vue___default.a
     },
-    props: ['amount'],
+    props: ['amount', 'selectedSlots'],
 
     data: function data() {
         return {
@@ -33100,11 +33100,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(3)
+var normalizeComponent = __webpack_require__(2)
 /* script */
 var __vue_script__ = __webpack_require__(70)
 /* template */
-var __vue_template__ = __webpack_require__(71)
+var __vue_template__ = __webpack_require__(74)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -33148,7 +33148,9 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_accounting_js_lib_formatNumber__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_accounting_js_lib_formatNumber__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__StripeElements_vue__ = __webpack_require__(71);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__StripeElements_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__StripeElements_vue__);
 //
 //
 //
@@ -33179,13 +33181,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    props: ['open', 'amount'],
+    components: {
+        StripeElements: __WEBPACK_IMPORTED_MODULE_1__StripeElements_vue___default.a
+    },
+    props: ['open', 'amount', 'selectedSlots'],
 
     data: function data() {
-        return {};
+        return {
+            form: {
+                companyName: '',
+                email: ''
+            },
+            working: false
+        };
     },
 
     computed: {
@@ -33225,13 +33242,151 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (this.$refs.modal.contains(e.relatedTarget)) {
                 return;
             }
-            this.$emit('close');
+            // this.$emit('close')
+        },
+        handleSubmit: function handleSubmit() {
+            var _this3 = this;
+
+            this.working = true, this.$refs.cardInput.createToken().then(function (token) {
+                return axios.post('/full-stack-radio/sponsorships', {
+                    company_name: _this3.form.companyName,
+                    email: _this3.form.email,
+                    sponsorable_slots: _this3.selectedSlots,
+                    payment_token: token.id
+                });
+            }).then(function (response) {
+                _this3.working = false, console.log(response);
+            });
         }
     }
 });
 
 /***/ }),
 /* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(72)
+/* template */
+var __vue_template__ = __webpack_require__(73)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/StripeElements.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-227b818f", Component.options)
+  } else {
+    hotAPI.reload("data-v-227b818f", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 72 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: [],
+    mounted: function mounted() {
+        this.stripe = Stripe('tokenkey');
+        this.elements = this.stripe.elements();
+        // Custom styling can be passed to options when creating an Element.
+        var style = {};
+
+        // Create an instance of the card Element.
+        this.card = this.elements.create('card', {
+            style: {
+                base: {
+                    // Add your base input styles here. For example:
+                    fontSize: '16px',
+                    fontSmoothing: 'antialiased',
+                    color: 'rgb(70, 85, 104)',
+                    '::placeholder': {
+                        color: 'rgba(70, 85, 104, .5)'
+                    }
+                }
+            }
+        });
+
+        // Add an instance of the card Element into the `card-element` <div>.
+        this.card.mount(this.$el);
+    },
+
+    methods: {
+        createToken: function createToken() {
+            return this.stripe.createToken(this.card).then(function (result) {
+                if (result.error) {
+                    console.log(result.error);
+                    // Inform the customer that there was an error.
+                    // var errorElement = document.getElementById('card-errors')
+                    // errorElement.textContent = result.error.message
+                } else {
+                    return result.token;
+
+                    // Send the token to your server.
+                    // stripeTokenHandler(result.token)
+                }
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 73 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div")
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-227b818f", module.exports)
+  }
+}
+
+/***/ }),
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -33268,72 +33423,134 @@ var render = function() {
               [_vm._v("Complete your purchase")]
             ),
             _vm._v(" "),
-            _c("form", { attrs: { action: "#", method: "POST" } }, [
-              _c("label", { staticClass: "block mb-4" }, [
-                _c("span", { staticClass: "block text-sm font-bold mb-2" }, [
-                  _vm._v("Company")
-                ]),
-                _vm._v(" "),
-                _c("input", {
-                  ref: "companyInput",
-                  staticClass:
-                    "leading-normal text-black w-full block bg-grey-light rounded px-4 py-2",
-                  attrs: { placeholder: "DigiTechnosoft Inc." }
-                })
-              ]),
-              _vm._v(" "),
-              _c("label", { staticClass: "block mb-4" }, [
-                _c("span", { staticClass: "block text-sm font-bold mb-2" }, [
-                  _vm._v("Email")
-                ]),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass:
-                    "leading-normal text-black w-full block bg-grey-light rounded px-4 py-2",
-                  attrs: { placeholder: "ricardo@milos.br" }
-                })
-              ]),
-              _vm._v(" "),
-              _c("label", { staticClass: "block mb-6" }, [
-                _c("span", { staticClass: "block text-sm font-bold mb-2" }, [
-                  _vm._v("Credit Card")
-                ]),
-                _vm._v(" "),
-                _c("input", {
-                  staticClass:
-                    "leading-normal text-black w-full block bg-grey-light rounded px-4 py-2",
-                  attrs: { placeholder: "ricardo@milos.br" }
-                })
-              ]),
-              _vm._v(" "),
-              _c("div", [
-                _c(
-                  "button",
-                  {
+            _c(
+              "form",
+              {
+                attrs: { action: "#", method: "POST" },
+                on: {
+                  submit: function($event) {
+                    $event.preventDefault()
+                    return _vm.handleSubmit($event)
+                  }
+                }
+              },
+              [
+                _c("label", { staticClass: "block mb-4" }, [
+                  _c("span", { staticClass: "block text-sm font-bold mb-2" }, [
+                    _vm._v("Company")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.companyName,
+                        expression: "form.companyName"
+                      }
+                    ],
+                    ref: "companyInput",
                     staticClass:
-                      "block w-full  px-5 py-2 text-lg leading-normal font-bold text-white rounded bg-indigo hover:bg-indigo-light mb-4",
-                    attrs: { type: "submit" }
-                  },
+                      "leading-normal text-black w-full block bg-grey-light rounded px-4 py-2",
+                    attrs: { placeholder: "DigiTechnosoft Inc." },
+                    domProps: { value: _vm.form.companyName },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "companyName", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("label", { staticClass: "block mb-4" }, [
+                  _c("span", { staticClass: "block text-sm font-bold mb-2" }, [
+                    _vm._v("Email")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.form.email,
+                        expression: "form.email"
+                      }
+                    ],
+                    staticClass:
+                      "leading-normal text-black w-full block bg-grey-light rounded px-4 py-2",
+                    attrs: { placeholder: "ricardo@milos.br" },
+                    domProps: { value: _vm.form.email },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.form, "email", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  { staticClass: "block mb-6" },
                   [
-                    _vm._v(
-                      "\n                        Pay $ " +
-                        _vm._s(_vm.amountInDollars) +
-                        " now\n                    "
-                    )
-                  ]
+                    _c(
+                      "span",
+                      { staticClass: "block text-sm font-bold mb-2" },
+                      [_vm._v("Credit Card")]
+                    ),
+                    _vm._v(" "),
+                    _c("stripe-elements", { ref: "cardInput" })
+                  ],
+                  1
                 ),
                 _vm._v(" "),
-                _c(
-                  "p",
-                  { staticClass: "text-grey-dark leading-normal text-center" },
-                  [
-                    _vm._v(
-                      "We'll Reach out for your sponsorship information after you've confirmed your purchase."
-                    )
-                  ]
-                )
-              ])
-            ])
+                _c("div", [
+                  _c(
+                    "button",
+                    {
+                      staticClass:
+                        "block w-full  px-5 py-2 text-lg leading-normal font-bold text-white rounded bg-indigo mb-4",
+                      class: {
+                        "opacity-50": _vm.working,
+                        "hover:bg-indigo-light": !_vm.working,
+                        "cursor-not-allowed": _vm.working
+                      },
+                      attrs: { type: "submit", disabled: _vm.working }
+                    },
+                    [
+                      !_vm.working
+                        ? _c("span", [
+                            _vm._v(
+                              "Pay $ " + _vm._s(_vm.amountInDollars) + " now"
+                            )
+                          ])
+                        : _vm._e(),
+                      _vm._v(" "),
+                      _vm.working
+                        ? _c("span", [_vm._v("Processing... ")])
+                        : _vm._e()
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "p",
+                    {
+                      staticClass: "text-grey-dark leading-normal text-center"
+                    },
+                    [
+                      _vm._v(
+                        "We'll Reach out for your sponsorship information after you've confirmed your purchase."
+                      )
+                    ]
+                  )
+                ])
+              ]
+            )
           ]
         )
       ]
@@ -33351,7 +33568,7 @@ if (false) {
 }
 
 /***/ }),
-/* 72 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -33374,7 +33591,11 @@ var render = function() {
       _vm._t("default"),
       _vm._v(" "),
       _c("complete-purchase-modal", {
-        attrs: { open: _vm.modalOpen, amount: _vm.amount },
+        attrs: {
+          open: _vm.modalOpen,
+          amount: _vm.amount,
+          "selected-slots": _vm.selectedSlots
+        },
         on: {
           close: function($event) {
             _vm.modalOpen = false
@@ -33396,7 +33617,7 @@ if (false) {
 }
 
 /***/ }),
-/* 73 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -33474,9 +33695,16 @@ var render = function() {
                 "div",
                 { staticClass: "w-1/4 flex justify-end items-center" },
                 [
-                  _c("pay-button", { attrs: { amount: _vm.total } }, [
-                    _vm._v("Pay Now")
-                  ])
+                  _c(
+                    "pay-button",
+                    {
+                      attrs: {
+                        amount: _vm.total,
+                        selectedSlots: _vm.selectedSlots
+                      }
+                    },
+                    [_vm._v("Pay Now")]
+                  )
                 ],
                 1
               )
@@ -33498,7 +33726,7 @@ if (false) {
 }
 
 /***/ }),
-/* 74 */
+/* 77 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

@@ -1,7 +1,7 @@
 <template>
     <button @click="modalOpen = true" class="rounded px-5 py-2 text-lg leading-normal font-bold text-white rounded bg-indigo hover:bg-indigo-light" type="button">
         <slot></slot>
-        <complete-purchase-modal :open="modalOpen" @close="modalOpen = false" :amount="amount" ></complete-purchase-modal>
+        <complete-purchase-modal :open="modalOpen" @close="modalOpen = false" :amount="amount" :selected-slots="selectedSlots" ></complete-purchase-modal>
     </button>
 </template>
 
@@ -12,7 +12,7 @@
         components: {
             CompletePurchaseModal,
         },
-        props: ['amount'],
+        props: ['amount', 'selectedSlots'],
 
         data() {
             return {
